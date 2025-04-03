@@ -145,7 +145,7 @@ const AdminSidebar = () => {
         </div>
         
         <div className="p-4 border-t border-sidebar-border">
-          <Link to="/">
+          <Link to="/admin/login">
             <Button
               variant="ghost"
               className={cn("w-full justify-start", {

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
@@ -7,200 +6,143 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { useToast } from "@/hooks/use-toast";
+import toast from "react-hot-toast";
+import { useRegister } from "../hooks/auth/useRegister";
 
 const AdminRegistration = () => {
-  const [formData, setFormData] = useState({
-    restaurantName: "",
-    address: "",
-    email: "",
-    password: "",
-    confirmPassword: ""
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [restaurantName, setRestaurantName] = useState("");
+  const [location, setLocation] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
-  
+
+  const { mutate, isPending: isLoading } = useRegister();
   const navigate = useNavigate();
-  const { toast } = useToast();
-  
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    
-    // Clear error when user types
-    if (errors[name]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
-    }
-  };
-  
+
   const validateForm = () => {
     const newErrors = {};
-    
-    if (!formData.restaurantName.trim()) {
+    if (!restaurantName.trim()) {
       newErrors.restaurantName = "Restaurant name is required";
     }
-    
-    if (!formData.address.trim()) {
-      newErrors.address = "Address is required";
+    if (!location.trim()) {
+      newErrors.location = "Location is required";
     }
-    
-    if (!formData.email.trim()) {
+    if (!email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
       newErrors.email = "Email is invalid";
     }
-    
-    if (!formData.password) {
+    if (!password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
+    } else if (password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     }
-    
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
-    
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     if (!validateForm()) return;
-    
-    setLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Registration successful!",
-        description: "You can now log in to your admin dashboard.",
-      });
-      navigate("/admin/login");
-    }, 1500);
-  };
-  
-  const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev);
+
+    const formData = new FormData();
+    formData.append("name", restaurantName);
+    formData.append("location", location);
+    formData.append("email", email);
+    formData.append("password", password);
+
+    mutate(formData, {
+      onSuccess: () => {
+        toast.success("Registration successful! You can now log in.");
+        navigate("/admin/login");
+      },
+      onError: (error) => {
+        toast.error(error.response?.data?.message || "An error occurred.");
+      },
+    });
   };
 
   return (
     <div className="flex flex-col min-h-screen">
-      
-      
       <main className="flex-grow pt-24 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-md mx-auto">
             <Card className="glass-card animate-scale-in">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Become a Member</CardTitle>
-                <CardDescription>
-                  Register your restaurant to start using TableTapster
-                </CardDescription>
+                <CardDescription>Register your restaurant to start using TableTapster</CardDescription>
               </CardHeader>
-              
+
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="restaurantName">Restaurant Name</Label>
                     <Input
                       id="restaurantName"
-                      name="restaurantName"
+                      type="text"
                       placeholder="Enter your restaurant name"
-                      value={formData.restaurantName}
-                      onChange={handleChange}
+                      value={restaurantName}
+                      onChange={(e) => setRestaurantName(e.target.value)}
                       className={errors.restaurantName ? "border-destructive" : ""}
                     />
-                    {errors.restaurantName && (
-                      <p className="text-xs text-destructive mt-1">{errors.restaurantName}</p>
-                    )}
+                    {errors.restaurantName && <p className="text-xs text-destructive mt-1">{errors.restaurantName}</p>}
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <Label htmlFor="address">Address</Label>
+                    <Label htmlFor="location">Location</Label>
                     <Input
-                      id="address"
-                      name="address"
-                      placeholder="Enter your restaurant address"
-                      value={formData.address}
-                      onChange={handleChange}
-                      className={errors.address ? "border-destructive" : ""}
+                      id="location"
+                      type="text"
+                      placeholder="Enter your restaurant location"
+                      value={location}
+                      onChange={(e) => setLocation(e.target.value)}
+                      className={errors.location ? "border-destructive" : ""}
                     />
-                    {errors.address && (
-                      <p className="text-xs text-destructive mt-1">{errors.address}</p>
-                    )}
+                    {errors.location && <p className="text-xs text-destructive mt-1">{errors.location}</p>}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
-                      name="email"
                       type="email"
                       placeholder="Enter your email"
-                      value={formData.email}
-                      onChange={handleChange}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className={errors.email ? "border-destructive" : ""}
                     />
-                    {errors.email && (
-                      <p className="text-xs text-destructive mt-1">{errors.email}</p>
-                    )}
+                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
                     <div className="relative">
                       <Input
                         id="password"
-                        name="password"
                         type={showPassword ? "text" : "password"}
                         placeholder="Create a password"
-                        value={formData.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                         className={errors.password ? "border-destructive pr-10" : "pr-10"}
                       />
                       <button
                         type="button"
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
-                        onClick={toggleShowPassword}
+                        onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                       </button>
                     </div>
-                    {errors.password && (
-                      <p className="text-xs text-destructive mt-1">{errors.password}</p>
-                    )}
+                    {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
                   </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword">Confirm Password</Label>
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Confirm your password"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      className={errors.confirmPassword ? "border-destructive" : ""}
-                    />
-                    {errors.confirmPassword && (
-                      <p className="text-xs text-destructive mt-1">{errors.confirmPassword}</p>
-                    )}
-                  </div>
-                  
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Registering..." : "Register"}
+
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Registering..." : "Register"}
                   </Button>
                 </form>
               </CardContent>
-              
+
               <CardFooter className="flex justify-center">
                 <p className="text-sm text-muted-foreground">
                   Already have an account?{" "}
@@ -213,8 +155,6 @@ const AdminRegistration = () => {
           </div>
         </div>
       </main>
-      
-      
     </div>
   );
 };

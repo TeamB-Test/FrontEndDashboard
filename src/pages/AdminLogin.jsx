@@ -2,34 +2,29 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useMutation } from "@tanstack/react-query";
+
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useLogin } from "../hooks/auth/useLogin";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
-  
-  const navigate = useNavigate();
+  const { mutate, isPending: isLoading } = useLogin();
 
-  const loginMutation = useMutation(async (loginData) => {
-    const response = await axios.post("https://testb-backend.onrender.com/auth/login", loginData);
-    return response.data;
-  }, {
-    onSuccess: (data) => {
-      localStorage.setItem("accessToken", data.accessToken);
-      navigate("/admin/dashboard");
-      toast.success("Login successful! Welcome to your admin dashboard.");
-    },
-    onError: (error) => {
-      toast.error(error.response?.data?.message || "An error occurred.");
-    }
-  });
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const newErrors = {};
@@ -48,7 +43,21 @@ const AdminLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    loginMutation.mutate({ email, password });
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    mutate(formData, {
+      onSuccess: (data) => {
+        // console.log("Login successful:", data);
+        localStorage.setItem("accessToken", data.data.access_token);
+        navigate("/admin/dashboard");
+        toast.success("Login successful! Welcome to your admin dashboard.");
+      },
+      onError: (error) => {
+        // console.error("Login error:", error);
+        toast.error(error.response?.data?.message || "An error occurred.");
+      },
+    });
   };
 
   return (
@@ -75,12 +84,21 @@ const AdminLogin = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       className={errors.email ? "border-destructive" : ""}
                     />
-                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+                    {errors.email && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <Label htmlFor="password">Password</Label>
-                      <Link to="#" className="text-xs text-primary hover:underline">Forgot password?</Link>
+                      <Link
+                        to="#"
+                        className="text-xs text-primary hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
                     </div>
                     <div className="relative">
                       <Input
@@ -89,26 +107,42 @@ const AdminLogin = () => {
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={errors.password ? "border-destructive pr-10" : "pr-10"}
+                        className={
+                          errors.password ? "border-destructive pr-10" : "pr-10"
+                        }
                       />
                       <button
                         type="button"
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        {showPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
                       </button>
                     </div>
-                    {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
+                    {errors.password && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.password}
+                      </p>
+                    )}
                   </div>
-                  <Button type="submit" className="w-full" disabled={loginMutation.isLoading}>
-                    {loginMutation.isLoading ? "Signing in..." : "Sign In"}
+                  <Button type="submit" className="w-full" disabled={isLoading}>
+                    {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </form>
               </CardContent>
               <CardFooter className="flex justify-center">
                 <p className="text-sm text-muted-foreground">
-                  Don't have an account? <Link to="/admin/register" className="text-primary hover:underline">Register</Link>
+                  Don't have an account?{" "}
+                  <Link
+                    to="/admin/register"
+                    className="text-primary hover:underline"
+                  >
+                    Register
+                  </Link>
                 </p>
               </CardFooter>
             </Card>

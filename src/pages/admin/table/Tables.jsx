@@ -130,7 +130,7 @@ const Tables = () => {
                       <CardDescription>
                         <div className="flex items-center gap-2">
                           <CiUser />
-                          <p>Seats : 4</p>
+                          <p>Seats : {table.seats}</p>
                         </div>
                       </CardDescription>
                     </CardHeader>

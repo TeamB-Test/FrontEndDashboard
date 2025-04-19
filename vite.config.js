@@ -14,4 +14,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "src"), // Alias '@' to the 'src' folder
     },
   },
+  server: {
+    port: 5000,
+  },
 });

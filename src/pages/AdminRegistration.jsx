@@ -1,8 +1,15 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -14,8 +21,10 @@ const AdminRegistration = () => {
   const [password, setPassword] = useState("");
   const [restaurantName, setRestaurantName] = useState("");
   const [location, setLocation] = useState("");
+  const [image, setImage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const fileInputRef = useRef(null);
 
   const { mutate, isPending: isLoading } = useRegister();
   const navigate = useNavigate();
@@ -38,8 +47,21 @@ const AdminRegistration = () => {
     } else if (password.length < 8) {
       newErrors.password = "Password must be at least 8 characters";
     }
+    if (!image) {
+      newErrors.image = "Restaurant image is required";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  const handleImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  const handleImageButtonClick = () => {
+    fileInputRef.current?.click();
   };
 
   const handleSubmit = (e) => {
@@ -51,6 +73,7 @@ const AdminRegistration = () => {
     formData.append("location", location);
     formData.append("email", email);
     formData.append("password", password);
+    formData.append("image", image); // Append the image file to FormData
 
     mutate(formData, {
       onSuccess: () => {
@@ -71,7 +94,9 @@ const AdminRegistration = () => {
             <Card className="glass-card animate-scale-in">
               <CardHeader className="text-center">
                 <CardTitle className="text-2xl">Become a Member</CardTitle>
-                <CardDescription>Register your restaurant to start using TableTapster</CardDescription>
+                <CardDescription>
+                  Register your restaurant to start using TableTapster
+                </CardDescription>
               </CardHeader>
 
               <CardContent>
@@ -84,9 +109,15 @@ const AdminRegistration = () => {
                       placeholder="Enter your restaurant name"
                       value={restaurantName}
                       onChange={(e) => setRestaurantName(e.target.value)}
-                      className={errors.restaurantName ? "border-destructive" : ""}
+                      className={
+                        errors.restaurantName ? "border-destructive" : ""
+                      }
                     />
-                    {errors.restaurantName && <p className="text-xs text-destructive mt-1">{errors.restaurantName}</p>}
+                    {errors.restaurantName && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.restaurantName}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -99,7 +130,11 @@ const AdminRegistration = () => {
                       onChange={(e) => setLocation(e.target.value)}
                       className={errors.location ? "border-destructive" : ""}
                     />
-                    {errors.location && <p className="text-xs text-destructive mt-1">{errors.location}</p>}
+                    {errors.location && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.location}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -112,7 +147,11 @@ const AdminRegistration = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       className={errors.email ? "border-destructive" : ""}
                     />
-                    {errors.email && <p className="text-xs text-destructive mt-1">{errors.email}</p>}
+                    {errors.email && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.email}
+                      </p>
+                    )}
                   </div>
 
                   <div className="space-y-2">
@@ -124,17 +163,60 @@ const AdminRegistration = () => {
                         placeholder="Create a password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className={errors.password ? "border-destructive pr-10" : "pr-10"}
+                        className={
+                          errors.password ? "border-destructive pr-10" : "pr-10"
+                        }
                       />
                       <button
                         type="button"
                         className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground"
                         onClick={() => setShowPassword(!showPassword)}
                       >
-                        {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        {showPassword ? (
+                          <EyeOff size={16} />
+                        ) : (
+                          <Eye size={16} />
+                        )}
                       </button>
                     </div>
-                    {errors.password && <p className="text-xs text-destructive mt-1">{errors.password}</p>}
+                    {errors.password && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.password}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="image">Restaurant Image</Label>
+                    <Input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageChange}
+                      ref={fileInputRef}
+                    />
+                    <Button
+                      type="button"
+                      onClick={handleImageButtonClick}
+                      className={
+                        errors.image ? "border-destructive w-full" : "w-full"
+                      }
+                    >
+                      {image ? image.name : "Upload Image"}
+                    </Button>
+                    {errors.image && (
+                      <p className="text-xs text-destructive mt-1">
+                        {errors.image}
+                      </p>
+                    )}
+                    {image && (
+                      <div className="mt-2">
+                        <p className="text-sm text-muted-foreground">
+                          Selected Image: {image.name}
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <Button type="submit" className="w-full" disabled={isLoading}>
@@ -146,7 +228,10 @@ const AdminRegistration = () => {
               <CardFooter className="flex justify-center">
                 <p className="text-sm text-muted-foreground">
                   Already have an account?{" "}
-                  <Link to="/admin/login" className="text-primary hover:underline">
+                  <Link
+                    to="/admin/login"
+                    className="text-primary hover:underline"
+                  >
                     Log in
                   </Link>
                 </p>

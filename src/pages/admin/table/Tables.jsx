@@ -35,7 +35,7 @@ const Tables = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editTable, setEditTable] = useState(null);
-  const [newTable, setNewTable] = useState({ number: "" });
+  const [newTable, setNewTable] = useState({ number: "", seats: 4 });
 
   const createTableMutation = useCreateTable();
   const updateTableMutation = useUpdateTable();
@@ -49,6 +49,7 @@ const Tables = () => {
   const handleSaveEdit = () => {
     const formData = new FormData();
     formData.append("number", editTable.number);
+    formData.append("seats", editTable.seats);
 
     updateTableMutation.mutate(
       { id: editTable.id, data: formData },
@@ -80,10 +81,11 @@ const Tables = () => {
   const handleCreateTable = () => {
     const formData = new FormData();
     formData.append("number", newTable.number);
+    formData.append("seats", newTable.seats || 4);
 
     createTableMutation.mutate(formData, {
       onSuccess: () => {
-        setNewTable({ number: "" });
+        setNewTable({ number: "" , seats: 4 });
         setIsCreateDialogOpen(false);
       },
       onError: (error) => {
@@ -180,6 +182,19 @@ const Tables = () => {
                   }
                 />
               </div>
+              <div className="space-y-2">
+                <Label>Seats</Label>
+                <Input
+                  type="number"
+                  value={editTable.seats}
+                  onChange={(e) =>
+                    setEditTable((prev) => ({
+                      ...prev,
+                      seats: e.target.value,
+                    }))
+                  }
+                />
+              </div>
             </div>
             <DialogFooter>
               <Button
@@ -215,6 +230,20 @@ const Tables = () => {
                   setNewTable((prev) => ({
                     ...prev,
                     number: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Seats</Label>
+              <Input
+                type="number"
+                value={newTable.seats}
+                
+                onChange={(e) =>
+                  setNewTable((prev) => ({
+                    ...prev,
+                    seats: e.target.value,
                   }))
                 }
               />

@@ -29,18 +29,19 @@ import { CiUser } from "react-icons/ci";
 import toast from "react-hot-toast";
 
 const Tables = () => {
-  const { data, isLoading } = useGetAllTables();
-  const tables = data?.data || [];
+  const { data, isLoading } = useGetAllTables(); // Fetch all tables data
+  const tables = data?.data || []; // Extract tables array from data or set to empty array
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editTable, setEditTable] = useState(null);
   const [newTable, setNewTable] = useState({ number: "", seats: 4 });
 
-  const createTableMutation = useCreateTable();
-  const updateTableMutation = useUpdateTable();
-  const deleteTableMutation = useDeleteTable();
+  const createTableMutation = useCreateTable(); // Mutation for creating a new table
+  const updateTableMutation = useUpdateTable(); // Mutation for updating an existing table
+  const deleteTableMutation = useDeleteTable(); // Mutation for deleting a table
 
+  // Handle editing a table
   const handleEditTable = (table) => {
     setEditTable(table);
     setIsEditDialogOpen(true);
@@ -79,7 +80,7 @@ const Tables = () => {
   };
 
   const handleCreateTable = () => {
-    const formData = new FormData();
+    const formData = new FormData(); // Create form data object
     formData.append("number", newTable.number);
     formData.append("seats", newTable.seats || 4);
 

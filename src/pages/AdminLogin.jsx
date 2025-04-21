@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState } from "react"; // Importing the useState hook from React to manage component state
+import { Link, useNavigate } from "react-router-dom"; // Importing Link and useNavigate from react-router-dom for navigation
+import { Eye, EyeOff } from "lucide-react"; // Importing Eye and EyeOff icons from lucide-react for password visibility toggle
+import { Button } from "@/components/ui/button"; // Importing Button component from the ui/button component
 import {
   Card,
   CardContent,
@@ -9,20 +9,20 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "../components/ui/card"; // Importing various Card components for structuring the login form
+import { Input } from "@/components/ui/input"; // Importing Input component for form inputs
+import { Label } from "@/components/ui/label"; // Importing Label component for form labels
 
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useLogin } from "../hooks/auth/useLogin";
+import axios from "axios";// Importing axios for making HTTP requests
+import toast from "react-hot-toast"; // Importing toast for displaying notifications
+import { useLogin } from "../hooks/auth/useLogin"; // Importing useLogin custom hook for handling login logic
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
-  const { mutate, isPending: isLoading } = useLogin();
+  const [email, setEmail] = useState(""); // State to store the email input value
+  const [password, setPassword] = useState(""); // State to store the password input value
+  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [errors, setErrors] = useState({}); // State to store form validation errors
+  const { mutate, isPending: isLoading } = useLogin(); // Destructuring mutate and isPending from useLogin hook
 
   const navigate = useNavigate();
 
@@ -37,19 +37,20 @@ const AdminLogin = () => {
       newErrors.password = "Password is required";
     }
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors).length === 0; // Return true if no errors
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    const formData = new FormData();
+    const formData = new FormData(); // Prepare form data
     formData.append("email", email);
     formData.append("password", password);
     mutate(formData, {
       onSuccess: (data) => {
         // console.log("Login successful:", data);
-        localStorage.setItem("accessToken", data.data.access_token);
+        localStorage.setItem("accessToken", data.data.access_token); // Store access token
         navigate("/admin/dashboard");
         toast.success("Login successful! Welcome to your admin dashboard.");
       },
@@ -153,4 +154,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default AdminLogin; // Export the component

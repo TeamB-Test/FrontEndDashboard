@@ -25,11 +25,15 @@ import {
   useUpdateFood,
   useDeleteFood,
 } from "../../../hooks/food/useFood";
+import { useGetAllCategories } from "../../../hooks/category/useCategory";
 import toast from "react-hot-toast";
 
 const Foods = () => {
   const { data, isLoading } = useGetAllFoods();
   const foods = data?.data || [];
+
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategories();
+  const categories = categoriesData?.data || [];
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
@@ -124,8 +128,23 @@ const Foods = () => {
                 <Card key={food.id}>
                   <CardHeader>
                     <CardTitle>{food.name}</CardTitle>
-                    <CardDescription>{food.description}</CardDescription>
-                    <Badge>${food.price}</Badge>
+                    <CardDescription>
+                      <div className="flex flex-col">
+                       <span> {food.description}</span>
+
+
+
+              <span>  {food.category.name}</span>
+                      </div>
+                    </CardDescription>
+                    {food.image && (
+                      <img
+                        src={`${food.image}`}
+                        alt={food.name}
+                        className="w-full h-40 object-cover rounded-md mt-2"
+                      />
+                    )}
+                    <Badge className="mt-2">${food.price}</Badge>
                   </CardHeader>
                   <CardContent className="flex justify-between">
                     <Button variant="ghost" size="icon" onClick={() => handleEditFood(food)}>
@@ -155,11 +174,57 @@ const Foods = () => {
               <DialogTitle>Edit Food</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <Input label="Name" value={editFood.name} onChange={(e) => setEditFood({ ...editFood, name: e.target.value })} />
-              <Input label="Description" value={editFood.description} onChange={(e) => setEditFood({ ...editFood, description: e.target.value })} />
-              <Input type="number" label="Price" value={editFood.price} onChange={(e) => setEditFood({ ...editFood, price: e.target.value })} />
-              <Input label="Category ID" value={editFood.categoryId} onChange={(e) => setEditFood({ ...editFood, categoryId: e.target.value })} />
-              <Input type="file" onChange={(e) => setEditFood({ ...editFood, image: e.target.files[0] })} />
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">Name</Label>
+                <Input
+                  id="edit-name"
+                  value={editFood.name}
+                  onChange={(e) => setEditFood({ ...editFood, name: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-description">Description</Label>
+                <Input
+                  id="edit-description"
+                  value={editFood.description}
+                  onChange={(e) => setEditFood({ ...editFood, description: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-price">Price</Label>
+                <Input
+                  id="edit-price"
+                  type="number"
+                  value={editFood.price}
+                  onChange={(e) => setEditFood({ ...editFood, price: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-category">Category</Label>
+                <select
+                  id="edit-category"
+                  value={editFood.categoryId}
+                  onChange={(e) =>
+                    setEditFood({ ...editFood, categoryId: e.target.value })
+                  }
+                  className="border border-input bg-background rounded-md h-10 px-3"
+                >
+                  <option value="">Select category</option>
+                  {categories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-image">Image</Label>
+                <Input
+                  id="edit-image"
+                  type="file"
+                  onChange={(e) => setEditFood({ ...editFood, image: e.target.files[0] })}
+                />
+              </div>
             </div>
             <DialogFooter>
               <Button onClick={() => setIsEditDialogOpen(false)} variant="outline">Cancel</Button>
@@ -178,11 +243,55 @@ const Foods = () => {
             <DialogTitle>Create New Food</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <Input label="Name" value={newFood.name} onChange={(e) => setNewFood({ ...newFood, name: e.target.value })} />
-            <Input label="Description" value={newFood.description} onChange={(e) => setNewFood({ ...newFood, description: e.target.value })} />
-            <Input type="number" label="Price" value={newFood.price} onChange={(e) => setNewFood({ ...newFood, price: e.target.value })} />
-            <Input label="Category ID" value={newFood.categoryId} onChange={(e) => setNewFood({ ...newFood, categoryId: e.target.value })} />
-            <Input type="file" onChange={(e) => setNewFood({ ...newFood, image: e.target.files[0] })} />
+            <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                value={newFood.name}
+                onChange={(e) => setNewFood({ ...newFood, name: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                id="description"
+                value={newFood.description}
+                onChange={(e) => setNewFood({ ...newFood, description: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="price">Price</Label>
+              <Input
+                id="price"
+                type="number"
+                value={newFood.price}
+                onChange={(e) => setNewFood({ ...newFood, price: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="category">Category</Label>
+              <select
+                id="category"
+                value={newFood.categoryId}
+                onChange={(e) => setNewFood({ ...newFood, categoryId: e.target.value })}
+                className="border border-input bg-background rounded-md h-10 px-3"
+              >
+                <option value="">Select category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="image">Image</Label>
+              <Input
+                id="image"
+                type="file"
+                onChange={(e) => setNewFood({ ...newFood, image: e.target.files[0] })}
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button onClick={() => setIsCreateDialogOpen(false)} variant="outline">Cancel</Button>

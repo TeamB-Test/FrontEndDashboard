@@ -7,7 +7,7 @@ export const useGetAllFoods = () => {
   return useQuery({
     queryKey: ["foods"],
     queryFn: async () => {
-      const response = await axios.get("/api/food");
+      const response = await axios.get("/product");
       return response.data;
     },
   });
@@ -18,7 +18,7 @@ export const useCreateFood = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (formData) => {
-      const response = await axios.post("/api/food", formData, {
+      const response = await axios.post("/product", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
@@ -35,7 +35,7 @@ export const useUpdateFood = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, data }) => {
-      const response = await axios.put(`/api/food/${id}`, data, {
+      const response = await axios.patch(`/product/${id}`, data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
@@ -52,7 +52,7 @@ export const useDeleteFood = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (id) => {
-      const response = await axios.delete(`/api/food/${id}`);
+      const response = await axios.delete(`/product/${id}`);
       return response.data;
     },
     onSuccess: () => {

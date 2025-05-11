@@ -10,6 +10,7 @@ import AdminDashboard from "./pages/admin/dashboard/Dashboard";
 import AdminTables from "./pages/admin/table/Tables";
 import AdminCategories from "./pages/admin/Categories/Categories";
 import AdminFood from "./pages/admin/Food/foods";
+import AdminOrder from "./pages/admin/Order/OrderPage";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRegistration from "./pages/AdminRegistration";
@@ -31,6 +32,7 @@ const App = () => (
         <Route path="/admin/tables" element={<AdminTables />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
         {<Route path="/admin/foods" element={<AdminFood />} /> }
+        {<Route path="/admin/orderpage" element={<AdminOrder />} /> }
         {/* 404 route */}
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -30,6 +30,7 @@ const Categories = () => {
   const { data, isLoading } = useGetAllCategories();
   const categories = data?.data || [];
 
+  // State for dialog visibility and form inputs
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editCategory, setEditCategory] = useState(null);
@@ -43,14 +44,16 @@ const Categories = () => {
   const updateCategoryMutation = useUpdateCategory();
   const deleteCategoryMutation = useDeleteCategory();
 
+  // Handle "Edit" button click: populate state and open dialog
   const handleEditCategory = (category) => {
     setEditCategory({
       ...category,
-      image: null,
+      image: null, // Reset image since existing image is already shown
     });
     setIsEditDialogOpen(true);
   };
 
+  // Send update request for category using FormData
   const handleSaveEdit = () => {
     console.log(editCategory);
     console.log("clicked edit");
@@ -58,7 +61,7 @@ const Categories = () => {
     formData.append("name", editCategory.name);
     formData.append("description", editCategory.description);
     if (editCategory.image) {
-      formData.append("image", editCategory.image);
+      formData.append("image", editCategory.image); // Only append new image
     }
 
     updateCategoryMutation.mutate(
@@ -77,6 +80,7 @@ const Categories = () => {
     );
   };
 
+  // Send create request for new category using FormData
   const handleCreateCategory = () => {
     const formData = new FormData();
     formData.append("name", newCategory.name);
@@ -87,8 +91,8 @@ const Categories = () => {
 
     createCategoryMutation.mutate(formData, {
       onSuccess: () => {
-        setNewCategory({ name: "", description: "", image: null });
-        setIsCreateDialogOpen(false);
+        setNewCategory({ name: "", description: "", image: null }); // Reset form
+        setIsCreateDialogOpen(false); // Close dialog
       },
       onError: (error) => {
         toast.error(

@@ -41,11 +41,11 @@ const AdminSidebar = () => {
   };
 
   const navItems = [
-    {
-      name: "Dashboard",
-      path: "/admin/dashboard",
-      icon: <LayoutDashboard size={20} />
-    },
+    // {
+    //   name: "Dashboard",
+    //   path: "/admin/dashboard",
+    //   icon: <LayoutDashboard size={20} />
+    // },
     {
       name: "Tables",
       path: "/admin/tables",
@@ -59,6 +59,11 @@ const AdminSidebar = () => {
     {
       name: "Categories",
       path: "/admin/categories",
+      icon: <List size={20} />
+    },
+    {
+      name: "Order",
+      path:"/admin/orderpage",
       icon: <List size={20} />
     }
   ];

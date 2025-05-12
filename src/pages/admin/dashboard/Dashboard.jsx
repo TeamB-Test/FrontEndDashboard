@@ -5,7 +5,7 @@ import DashboardCard from "../../../components/DashboardCard";
 import DashboardChart from "../../../components/DashboardChart";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 
-// Mock data for the dashboard
+// Mock data for the dashboard  
 const ordersByDay = [
   { name: "Mon", orders: 34 },
   { name: "Tue", orders: 42 },

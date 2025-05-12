@@ -10,11 +10,22 @@ import {
   CardDescription,
   CardContent,
 } from "../../../components/ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "../../../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../../../components/ui/dialog";
 import { Label } from "../../../components/ui/label";
 import { Input } from "../../../components/ui/input";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { useGetAllOrders, useCreateOrder, useDeleteOrder, useUpdateOrderStatus } from "../../../hooks/Order/useOrder";
+import {
+  useGetAllOrders,
+  useCreateOrder,
+  useDeleteOrder,
+  useUpdateOrderStatus,
+} from "../../../hooks/Order/useOrder";
 
 const OrderPage = () => {
   const { data, isLoading } = useGetAllOrders();
@@ -53,16 +64,24 @@ const OrderPage = () => {
   const handleCreate = () => {
     createOrderMutation.mutate(newOrder, {
       onSuccess: () => {
-        setNewOrder({ tableId: "", productIds: "", quantities: "", notes: "", status: "PENDING" });
+        setNewOrder({
+          tableId: "",
+          productIds: "",
+          quantities: "",
+          notes: "",
+          status: "PENDING",
+        });
         setIsDialogOpen(false);
       },
-      onError: (error) => toast.error(error.response?.data?.message || "Error creating order"),
+      onError: (error) =>
+        toast.error(error.response?.data?.message || "Error creating order"),
     });
   };
 
   const handleDelete = (id) => {
     deleteOrderMutation.mutate(id, {
-      onError: (error) => toast.error(error.response?.data?.message || "Error deleting order"),
+      onError: (error) =>
+        toast.error(error.response?.data?.message || "Error deleting order"),
     });
   };
 
@@ -70,7 +89,8 @@ const OrderPage = () => {
     updateStatusMutation.mutate(
       { id, status },
       {
-        onError: (error) => toast.error(error.response?.data?.message || "Error updating status"),
+        onError: (error) =>
+          toast.error(error.response?.data?.message || "Error updating status"),
       }
     );
   };
@@ -102,17 +122,23 @@ const OrderPage = () => {
                     {/* <Button size="sm" variant="secondary" onClick={() => handleEdit(order)}>
                       <Edit size={14} />
                     </Button> */}
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(order.id)}>
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(order.id)}
+                    >
                       <Trash2 size={14} />
                     </Button>
                     <select
                       value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(order.id, e.target.value)
+                      }
                       className="border rounded px-2 py-1 text-sm"
                     >
                       <option value="PENDING">PENDING</option>
                       <option value="COMPLETED">COMPLETED</option>
-                      <option value="CANCELLED">CANCELLED</option>
+                      <option value="ACCEPTED">ACCEPTED</option>
                     </select>
                   </div>
                 </CardContent>
@@ -124,7 +150,9 @@ const OrderPage = () => {
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editOrder ? "Edit Order" : "Create Order"}</DialogTitle>
+              <DialogTitle>
+                {editOrder ? "Edit Order" : "Create Order"}
+              </DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
@@ -140,13 +168,18 @@ const OrderPage = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="productIds">Product IDs (comma separated)</Label>
+                <Label htmlFor="productIds">
+                  Product IDs (comma separated)
+                </Label>
                 <Input
                   id="productIds"
                   value={editOrder?.productIds ?? newOrder.productIds}
                   onChange={(e) =>
                     editOrder
-                      ? setEditOrder({ ...editOrder, productIds: e.target.value })
+                      ? setEditOrder({
+                          ...editOrder,
+                          productIds: e.target.value,
+                        })
                       : setNewOrder({ ...newOrder, productIds: e.target.value })
                   }
                 />
@@ -158,7 +191,10 @@ const OrderPage = () => {
                   value={editOrder?.quantities ?? newOrder.quantities}
                   onChange={(e) =>
                     editOrder
-                      ? setEditOrder({ ...editOrder, quantities: e.target.value })
+                      ? setEditOrder({
+                          ...editOrder,
+                          quantities: e.target.value,
+                        })
                       : setNewOrder({ ...newOrder, quantities: e.target.value })
                   }
                 />
@@ -177,7 +213,9 @@ const OrderPage = () => {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                Cancel
+              </Button>
               <Button onClick={editOrder ? handleSave : handleCreate}>
                 {editOrder ? "Save Changes" : "Create Order"}
               </Button>

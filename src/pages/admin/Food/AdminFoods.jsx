@@ -25,14 +25,14 @@ import {
   useUpdateFood,
   useDeleteFood,
 } from "../../../hooks/food/useFood";
-import { useGetAllCategories } from "../../../hooks/category/useCategory";
+import { useGetAllCategories } from "../../../hooks/Category/useCategory";
 import toast from "react-hot-toast";
 
 const Foods = () => {
   const { data, isLoading } = useGetAllFoods();
   const foods = data?.data || [];
 
-  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategories();
+  const { data: categoriesData } = useGetAllCategories();
   const categories = categoriesData?.data || [];
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -130,11 +130,9 @@ const Foods = () => {
                     <CardTitle>{food.name}</CardTitle>
                     <CardDescription>
                       <div className="flex flex-col">
-                       <span> {food.description}</span>
+                        <span> {food.description}</span>
 
-
-
-              <span>  {food.category.name}</span>
+                        <span> {food.category.name}</span>
                       </div>
                     </CardDescription>
                     {food.image && (
@@ -147,7 +145,11 @@ const Foods = () => {
                     <Badge className="mt-2">${food.price}</Badge>
                   </CardHeader>
                   <CardContent className="flex justify-between">
-                    <Button variant="ghost" size="icon" onClick={() => handleEditFood(food)}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleEditFood(food)}
+                    >
                       <Edit size={16} />
                     </Button>
                     <Button
@@ -179,7 +181,9 @@ const Foods = () => {
                 <Input
                   id="edit-name"
                   value={editFood.name}
-                  onChange={(e) => setEditFood({ ...editFood, name: e.target.value })}
+                  onChange={(e) =>
+                    setEditFood({ ...editFood, name: e.target.value })
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -187,7 +191,9 @@ const Foods = () => {
                 <Input
                   id="edit-description"
                   value={editFood.description}
-                  onChange={(e) => setEditFood({ ...editFood, description: e.target.value })}
+                  onChange={(e) =>
+                    setEditFood({ ...editFood, description: e.target.value })
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -196,7 +202,9 @@ const Foods = () => {
                   id="edit-price"
                   type="number"
                   value={editFood.price}
-                  onChange={(e) => setEditFood({ ...editFood, price: e.target.value })}
+                  onChange={(e) =>
+                    setEditFood({ ...editFood, price: e.target.value })
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -222,13 +230,23 @@ const Foods = () => {
                 <Input
                   id="edit-image"
                   type="file"
-                  onChange={(e) => setEditFood({ ...editFood, image: e.target.files[0] })}
+                  onChange={(e) =>
+                    setEditFood({ ...editFood, image: e.target.files[0] })
+                  }
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button onClick={() => setIsEditDialogOpen(false)} variant="outline">Cancel</Button>
-              <Button onClick={handleSaveEdit} disabled={updateFoodMutation.isLoading}>
+              <Button
+                onClick={() => setIsEditDialogOpen(false)}
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSaveEdit}
+                disabled={updateFoodMutation.isLoading}
+              >
                 {updateFoodMutation.isLoading ? "Saving..." : "Save"}
               </Button>
             </DialogFooter>
@@ -248,7 +266,9 @@ const Foods = () => {
               <Input
                 id="name"
                 value={newFood.name}
-                onChange={(e) => setNewFood({ ...newFood, name: e.target.value })}
+                onChange={(e) =>
+                  setNewFood({ ...newFood, name: e.target.value })
+                }
               />
             </div>
             <div className="grid gap-2">
@@ -256,7 +276,9 @@ const Foods = () => {
               <Input
                 id="description"
                 value={newFood.description}
-                onChange={(e) => setNewFood({ ...newFood, description: e.target.value })}
+                onChange={(e) =>
+                  setNewFood({ ...newFood, description: e.target.value })
+                }
               />
             </div>
             <div className="grid gap-2">
@@ -265,7 +287,9 @@ const Foods = () => {
                 id="price"
                 type="number"
                 value={newFood.price}
-                onChange={(e) => setNewFood({ ...newFood, price: e.target.value })}
+                onChange={(e) =>
+                  setNewFood({ ...newFood, price: e.target.value })
+                }
               />
             </div>
             <div className="grid gap-2">
@@ -273,7 +297,9 @@ const Foods = () => {
               <select
                 id="category"
                 value={newFood.categoryId}
-                onChange={(e) => setNewFood({ ...newFood, categoryId: e.target.value })}
+                onChange={(e) =>
+                  setNewFood({ ...newFood, categoryId: e.target.value })
+                }
                 className="border border-input bg-background rounded-md h-10 px-3"
               >
                 <option value="">Select category</option>
@@ -289,13 +315,23 @@ const Foods = () => {
               <Input
                 id="image"
                 type="file"
-                onChange={(e) => setNewFood({ ...newFood, image: e.target.files[0] })}
+                onChange={(e) =>
+                  setNewFood({ ...newFood, image: e.target.files[0] })
+                }
               />
             </div>
           </div>
           <DialogFooter>
-            <Button onClick={() => setIsCreateDialogOpen(false)} variant="outline">Cancel</Button>
-            <Button onClick={handleCreateFood} disabled={createFoodMutation.isLoading}>
+            <Button
+              onClick={() => setIsCreateDialogOpen(false)}
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateFood}
+              disabled={createFoodMutation.isLoading}
+            >
               {createFoodMutation.isLoading ? "Creating..." : "Create"}
             </Button>
           </DialogFooter>

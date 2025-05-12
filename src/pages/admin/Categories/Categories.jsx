@@ -19,8 +19,12 @@ import {
 } from "@/components/ui/dialog";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import toast from "react-hot-toast";
-import { useCreateCategory, useDeleteCategory, useGetAllCategories, useUpdateCategory } from "../../../hooks/Category/UseCategory";
-
+import {
+  useCreateCategory,
+  useDeleteCategory,
+  useGetAllCategories,
+  useUpdateCategory,
+} from "../../../hooks/Category/useCategory";
 
 const Categories = () => {
   const { data, isLoading } = useGetAllCategories();
@@ -48,8 +52,8 @@ const Categories = () => {
   };
 
   const handleSaveEdit = () => {
-    console.log(editCategory)
-    console.log("clicked edit")
+    console.log(editCategory);
+    console.log("clicked edit");
     const formData = new FormData();
     formData.append("name", editCategory.name);
     formData.append("description", editCategory.description);
@@ -62,10 +66,12 @@ const Categories = () => {
       {
         onSuccess: () => {
           setIsEditDialogOpen(false);
-          console.log("test")
+          console.log("test");
         },
         onError: (error) => {
-          toast.error(error.response?.data?.message || "Failed to update category");
+          toast.error(
+            error.response?.data?.message || "Failed to update category"
+          );
         },
       }
     );
@@ -85,7 +91,9 @@ const Categories = () => {
         setIsCreateDialogOpen(false);
       },
       onError: (error) => {
-        toast.error(error.response?.data?.message || "Failed to create category");
+        toast.error(
+          error.response?.data?.message || "Failed to create category"
+        );
       },
     });
   };
@@ -93,7 +101,9 @@ const Categories = () => {
   const handleDeleteCategory = (id) => {
     deleteCategoryMutation.mutate(id, {
       onError: (error) => {
-        toast.error(error.response?.data?.message || "Failed to delete category");
+        toast.error(
+          error.response?.data?.message || "Failed to delete category"
+        );
       },
     });
   };
@@ -104,7 +114,10 @@ const Categories = () => {
       <div className="flex-1 ml-16 md:ml-64 p-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Categories</h1>
-          <Button onClick={() => setIsCreateDialogOpen(true)} className="flex gap-2">
+          <Button
+            onClick={() => setIsCreateDialogOpen(true)}
+            className="flex gap-2"
+          >
             <PlusCircle size={16} />
             <span>Create Category</span>
           </Button>
@@ -121,10 +134,18 @@ const Categories = () => {
                   <CardDescription>{category.description}</CardDescription>
                 </CardHeader>
                 {category.image && (
-                  <img src={category.image} alt={category.name} className="w-full h-40 object-cover" />
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="w-full h-40 object-cover"
+                  />
                 )}
                 <CardContent className="flex justify-between pt-4">
-                  <Button variant="ghost" size="icon" onClick={() => handleEditCategory(category)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleEditCategory(category)}
+                  >
                     <Edit size={16} />
                   </Button>
                   <Button
@@ -153,14 +174,21 @@ const Categories = () => {
               <Label>Name</Label>
               <Input
                 value={newCategory.name}
-                onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
+                onChange={(e) =>
+                  setNewCategory({ ...newCategory, name: e.target.value })
+                }
               />
             </div>
             <div className="space-y-2">
               <Label>Description</Label>
               <Input
                 value={newCategory.description}
-                onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
+                onChange={(e) =>
+                  setNewCategory({
+                    ...newCategory,
+                    description: e.target.value,
+                  })
+                }
               />
             </div>
             <div className="space-y-2">
@@ -168,13 +196,23 @@ const Categories = () => {
               <Input
                 type="file"
                 accept="image/*"
-                onChange={(e) => setNewCategory({ ...newCategory, image: e.target.files[0] })}
+                onChange={(e) =>
+                  setNewCategory({ ...newCategory, image: e.target.files[0] })
+                }
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsCreateDialogOpen(false)}>Cancel</Button>
-            <Button onClick={handleCreateCategory} disabled={createCategoryMutation.isPending} >
+            <Button
+              variant="outline"
+              onClick={() => setIsCreateDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleCreateCategory}
+              disabled={createCategoryMutation.isPending}
+            >
               {createCategoryMutation.isPending ? "Creating..." : "Create"}
             </Button>
           </DialogFooter>
@@ -193,14 +231,21 @@ const Categories = () => {
                 <Label>Name</Label>
                 <Input
                   value={editCategory.name}
-                  onChange={(e) => setEditCategory({ ...editCategory, name: e.target.value })}
+                  onChange={(e) =>
+                    setEditCategory({ ...editCategory, name: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
                 <Label>Description</Label>
                 <Input
                   value={editCategory.description}
-                  onChange={(e) => setEditCategory({ ...editCategory, description: e.target.value })}
+                  onChange={(e) =>
+                    setEditCategory({
+                      ...editCategory,
+                      description: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -208,13 +253,26 @@ const Categories = () => {
                 <Input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => setEditCategory({ ...editCategory, image: e.target.files[0] })}
+                  onChange={(e) =>
+                    setEditCategory({
+                      ...editCategory,
+                      image: e.target.files[0],
+                    })
+                  }
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleSaveEdit} disabled={updateCategoryMutation.isPending}>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditDialogOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={handleSaveEdit}
+                disabled={updateCategoryMutation.isPending}
+              >
                 {updateCategoryMutation.isPending ? "Saving..." : "Save"}
               </Button>
             </DialogFooter>

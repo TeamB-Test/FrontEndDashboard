@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -9,7 +8,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Menu
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -41,31 +40,31 @@ const AdminSidebar = () => {
   };
 
   const navItems = [
-    // {
-    //   name: "Dashboard",
-    //   path: "/admin/dashboard",
-    //   icon: <LayoutDashboard size={20} />
-    // },
+    {
+      name: "Dashboard",
+      path: "/admin/dashboard",
+      icon: <LayoutDashboard size={20} />,
+    },
     {
       name: "Tables",
       path: "/admin/tables",
-      icon: <Table size={20} />
+      icon: <Table size={20} />,
     },
     {
       name: "Foods",
       path: "/admin/foods",
-      icon: <Utensils size={20} />
+      icon: <Utensils size={20} />,
     },
     {
       name: "Categories",
       path: "/admin/categories",
-      icon: <List size={20} />
+      icon: <List size={20} />,
     },
     {
       name: "Order",
-      path:"/admin/orderpage",
-      icon: <List size={20} />
-    }
+      path: "/admin/orderpage",
+      icon: <List size={20} />,
+    },
   ];
 
   const sidebarClasses = cn(
@@ -74,7 +73,7 @@ const AdminSidebar = () => {
       "w-64": !collapsed,
       "w-16": collapsed && !isMobile,
       "w-64 transform -translate-x-full": collapsed && isMobile && !mobileOpen,
-      "w-64 transform translate-x-0": collapsed && isMobile && mobileOpen
+      "w-64 transform translate-x-0": collapsed && isMobile && mobileOpen,
     }
   );
 
@@ -82,7 +81,7 @@ const AdminSidebar = () => {
     "fixed inset-0 bg-black/50 z-30 transition-opacity duration-300",
     {
       "opacity-0 pointer-events-none": !mobileOpen,
-      "opacity-100": mobileOpen
+      "opacity-100": mobileOpen,
     }
   );
 
@@ -97,19 +96,25 @@ const AdminSidebar = () => {
           <Menu size={20} />
         </button>
       )}
-      
+
       {/* Overlay for mobile */}
       <div className={overlayClasses} onClick={() => setMobileOpen(false)} />
-      
+
       <div className={sidebarClasses}>
         <div className="flex items-center justify-between p-4 border-b border-sidebar-border">
-          <Link to="/admin/dashboard" className={cn("font-semibold text-xl transition-opacity duration-300", {
-            "opacity-0 w-0": collapsed && !isMobile,
-            "opacity-100": !collapsed || isMobile
-          })}>
+          <Link
+            to="/admin/dashboard"
+            className={cn(
+              "font-semibold text-xl transition-opacity duration-300",
+              {
+                "opacity-0 w-0": collapsed && !isMobile,
+                "opacity-100": !collapsed || isMobile,
+              }
+            )}
+          >
             TableTapster
           </Link>
-          
+
           {!isMobile && (
             <Button
               variant="ghost"
@@ -117,11 +122,15 @@ const AdminSidebar = () => {
               onClick={toggleSidebar}
               className="rounded-full hover:bg-sidebar-accent"
             >
-              {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
+              {collapsed ? (
+                <ChevronRight size={18} />
+              ) : (
+                <ChevronLeft size={18} />
+              )}
             </Button>
           )}
         </div>
-        
+
         <div className="flex-1 py-6 overflow-y-auto">
           <nav className="space-y-1 px-2">
             {navItems.map((item) => (
@@ -139,7 +148,7 @@ const AdminSidebar = () => {
                 <span
                   className={cn("ml-3 transition-opacity duration-300", {
                     "opacity-0 w-0": collapsed && !isMobile,
-                    "opacity-100": !collapsed || isMobile
+                    "opacity-100": !collapsed || isMobile,
                   })}
                 >
                   {item.name}
@@ -148,20 +157,20 @@ const AdminSidebar = () => {
             ))}
           </nav>
         </div>
-        
+
         <div className="p-4 border-t border-sidebar-border">
           <Link to="/admin/login">
             <Button
               variant="ghost"
               className={cn("w-full justify-start", {
-                "px-0": collapsed && !isMobile
+                "px-0": collapsed && !isMobile,
               })}
             >
               <LogOut size={20} />
               <span
                 className={cn("ml-3 transition-opacity duration-300", {
                   "opacity-0 w-0": collapsed && !isMobile,
-                  "opacity-100": !collapsed || isMobile
+                  "opacity-100": !collapsed || isMobile,
                 })}
               >
                 Logout

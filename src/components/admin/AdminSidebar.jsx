@@ -41,26 +41,27 @@ const AdminSidebar = () => {
   };
 
   const navItems = [
-    // {
-    //   name: "Dashboard",
-    //   path: "/admin/dashboard",
-    //   icon: <LayoutDashboard size={20} />
-    // },
+    {
+      name: "Dashboard",
+      path: "/admin/dashboard",
+      icon: <LayoutDashboard size={20} />
+    },
     {
       name: "Tables",
       path: "/admin/tables",
       icon: <Table size={20} />
+    },
+     {
+      name: "Categories",
+      path: "/admin/categories",
+      icon: <List size={20} />
     },
     {
       name: "Foods",
       path: "/admin/foods",
       icon: <Utensils size={20} />
     },
-    {
-      name: "Categories",
-      path: "/admin/categories",
-      icon: <List size={20} />
-    },
+   
     {
       name: "Order",
       path:"/admin/orderpage",

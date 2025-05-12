@@ -29,32 +29,34 @@ import { useGetAllCategories } from "../../../hooks/category/useCategory";
 import toast from "react-hot-toast";
 
 const Foods = () => {
-  const { data, isLoading } = useGetAllFoods();
+  const { data, isLoading } = useGetAllFoods(); // API hooks to fetch, create, update, and delete food items
   const foods = data?.data || [];
 
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategories();
   const categories = categoriesData?.data || [];
 
-  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [editFood, setEditFood] = useState(null);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false); // State to control the open/close of the edit dialog
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // State to control the open/close of the create dialog
+  const [editFood, setEditFood] = useState(null); // Holds the currently edited food item
   const [newFood, setNewFood] = useState({
     name: "",
     description: "",
     price: "",
     categoryId: "",
     image: null,
-  });
+  }); // State for the new food form input values
 
   const createFoodMutation = useCreateFood();
   const updateFoodMutation = useUpdateFood();
   const deleteFoodMutation = useDeleteFood();
 
+  // When user clicks the edit icon, populate the dialog with selected food's data
   const handleEditFood = (food) => {
     setEditFood(food);
     setIsEditDialogOpen(true);
   };
 
+  // Sends updated food data to the backend, including image if modified
   const handleSaveEdit = () => {
     const formData = new FormData();
     formData.append("name", editFood.name);
@@ -120,6 +122,7 @@ const Foods = () => {
               Create Food
             </Button>
           </div>
+
           {isLoading ? (
             <p>Loading foods...</p>
           ) : (
@@ -144,7 +147,7 @@ const Foods = () => {
                         className="w-full h-40 object-cover rounded-md mt-2"
                       />
                     )}
-                    <Badge className="mt-2">${food.price}</Badge>
+                    <Badge className="mt-2">Rs {food.price}</Badge>
                   </CardHeader>
                   <CardContent className="flex justify-between">
                     <Button variant="ghost" size="icon" onClick={() => handleEditFood(food)}>

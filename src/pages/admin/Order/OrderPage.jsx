@@ -1,4 +1,5 @@
 // OrderPage.jsx
+// Imports required UI components, icons, toast notifications, and API hooks
 import { useState } from "react";
 import { Edit, Trash2, PlusCircle } from "lucide-react";
 import toast from "react-hot-toast";
@@ -16,15 +17,19 @@ import { Input } from "../../../components/ui/input";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { useGetAllOrders, useCreateOrder, useDeleteOrder, useUpdateOrderStatus } from "../../../hooks/Order/useOrder";
 
+// Main order management page component
 const OrderPage = () => {
+  // Fetch all orders
   const { data, isLoading } = useGetAllOrders();
   const orders = data?.data || [];
 
+  // CRUD mutations for orders
   const createOrderMutation = useCreateOrder();
   // const updateOrderMutation = useUpdateOrder();
   const deleteOrderMutation = useDeleteOrder();
   const updateStatusMutation = useUpdateOrderStatus();
 
+  // State management for dialog and order form
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editOrder, setEditOrder] = useState(null);
   const [newOrder, setNewOrder] = useState({
@@ -35,6 +40,7 @@ const OrderPage = () => {
     status: "PENDING",
   });
 
+  // Opens dialog and sets selected order for editing
   const handleEdit = (order) => {
     setEditOrder(order);
     setIsDialogOpen(true);
@@ -50,6 +56,7 @@ const OrderPage = () => {
   //   );
   // };
 
+  // Handles creation of a new order
   const handleCreate = () => {
     createOrderMutation.mutate(newOrder, {
       onSuccess: () => {
@@ -60,12 +67,14 @@ const OrderPage = () => {
     });
   };
 
+  // Handles deletion of an order
   const handleDelete = (id) => {
     deleteOrderMutation.mutate(id, {
       onError: (error) => toast.error(error.response?.data?.message || "Error deleting order"),
     });
   };
 
+  // Updates status of a specific order
   const handleStatusChange = (id, status) => {
     updateStatusMutation.mutate(
       { id, status },
@@ -96,26 +105,34 @@ const OrderPage = () => {
                   <CardDescription>Status: {order.status}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p>Total Price: ${order.totalPrice}</p>
-                  <p>Notes: {order.notes}</p>
-                  <div className="flex justify-between gap-2">
-                    {/* <Button size="sm" variant="secondary" onClick={() => handleEdit(order)}>
-                      <Edit size={14} />
-                    </Button> */}
-                    <Button size="sm" variant="destructive" onClick={() => handleDelete(order.id)}>
-                      <Trash2 size={14} />
-                    </Button>
-                    <select
-                      value={order.status}
-                      onChange={(e) => handleStatusChange(order.id, e.target.value)}
-                      className="border rounded px-2 py-1 text-sm"
-                    >
-                      <option value="PENDING">PENDING</option>
-                      <option value="COMPLETED">COMPLETED</option>
-                      <option value="CANCELLED">CANCELLED</option>
-                    </select>
-                  </div>
-                </CardContent>
+  <p>Total Price: Rs {order.totalPrice}</p>
+  <p>Notes: {order.notes}</p>
+  <div>
+    <p className="font-semibold">Ordered Items:</p>
+    <ul className="list-disc list-inside text-sm">
+      {order.products?.map((product) => (
+        <li key={product.id}>
+          {product.name} × {product.quantity}
+        </li>
+      ))}
+    </ul>
+  </div>
+  <div className="flex justify-between gap-2">
+    <Button size="sm" variant="destructive" onClick={() => handleDelete(order.id)}>
+      <Trash2 size={14} />
+    </Button>
+    <select
+      value={order.status}
+      onChange={(e) => handleStatusChange(order.id, e.target.value)}
+      className="border rounded px-2 py-1 text-sm"
+    >
+      <option value="PENDING">PENDING</option>
+      <option value="COMPLETED">COMPLETED</option>
+      <option value="CANCELLED">CANCELLED</option>
+    </select>
+  </div>
+</CardContent>
+
               </Card>
             ))}
           </div>

@@ -125,34 +125,39 @@ const OrderPage = () => {
                   <CardDescription>Status: {order.status}</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-  <p>Total Price: Rs {order.totalPrice}</p>
-  <p>Notes: {order.notes}</p>
-  <div>
-    <p className="font-semibold">Ordered Items:</p>
-    <ul className="list-disc list-inside text-sm">
-      {order.products?.map((product) => (
-        <li key={product.id}>
-          {product.name} × {product.quantity}
-        </li>
-      ))}
-    </ul>
-  </div>
-  <div className="flex justify-between gap-2">
-    <Button size="sm" variant="destructive" onClick={() => handleDelete(order.id)}>
-      <Trash2 size={14} />
-    </Button>
-    <select
-      value={order.status}
-      onChange={(e) => handleStatusChange(order.id, e.target.value)}
-      className="border rounded px-2 py-1 text-sm"
-    >
-      <option value="PENDING">PENDING</option>
-      <option value="COMPLETED">COMPLETED</option>
-      <option value="CANCELLED">CANCELLED</option>
-    </select>
-  </div>
-</CardContent>
-
+                  <p>Total Price: Rs {order.totalPrice}</p>
+                  <p>Notes: {order.notes}</p>
+                  <div>
+                    <p className="font-semibold">Ordered Items:</p>
+                    <ul className="list-disc list-inside text-sm">
+                      {order.products?.map((product) => (
+                        <li key={product.id}>
+                          {product.name} × {product.quantity}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      onClick={() => handleDelete(order.id)}
+                    >
+                      <Trash2 size={14} />
+                    </Button>
+                    <select
+                      value={order.status}
+                      onChange={(e) =>
+                        handleStatusChange(order.id, e.target.value)
+                      }
+                      className="border rounded px-2 py-1 text-sm"
+                    >
+                      <option value="PENDING">PENDING</option>
+                      <option value="COMPLETED">COMPLETED</option>
+                      <option value="ACCEPTED">ACCEPTED</option>
+                    </select>
+                  </div>
+                </CardContent>
               </Card>
             ))}
           </div>

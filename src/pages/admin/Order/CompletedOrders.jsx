@@ -18,9 +18,9 @@ import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { useGetAllOrders, useCreateOrder, useDeleteOrder, useUpdateOrderStatus } from "../../../hooks/Order/useOrder";
 
 // Main order management page component
-const OrderPage = () => {
+const CompletedOrders = () => {
   // Fetch all orders
-  const { data, isLoading } = useGetAllOrders(false);
+  const { data, isLoading } = useGetAllOrders(true);
   const orders = data?.data || [];
 
   // CRUD mutations for orders
@@ -206,4 +206,4 @@ const OrderPage = () => {
   );
 };
 
-export default OrderPage;
+export default CompletedOrders;

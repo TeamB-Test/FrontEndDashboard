@@ -4,11 +4,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "../../lib/Instances/AxiosInstance"; // Make sure this instance includes your Authorization header
 
 // GET all orders
-export const useGetAllOrders = () => {
+export const useGetAllOrders = (isCompleted) => {
   return useQuery({
     queryKey: ["orders"],
     queryFn: async () => {
-      const res = await axios.get("/order");
+      const res = await axios.get("/order?isCompleted="+isCompleted);
       return res.data;
     },
   });

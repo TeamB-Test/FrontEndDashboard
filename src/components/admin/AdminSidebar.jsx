@@ -63,9 +63,15 @@ const AdminSidebar = () => {
    
     {
       name: "Order",
-      path: "/admin/orderpage",
-      icon: <List size={20} />,
+      path:"/admin/orderpage",
+      icon: <List size={20} />
     },
+
+    {
+      name: "Order History",
+      path:"/admin/completed",
+      icon: <List size={20} />
+    }
   ];
 
   const sidebarClasses = cn(

@@ -14,6 +14,7 @@ import AdminOrder from "./pages/admin/Order/OrderPage";
 import NotFound from "./pages/NotFound";
 import AdminLogin from "./pages/AdminLogin";
 import AdminRegistration from "./pages/AdminRegistration";
+import CompletedOrders from "./pages/admin/Order/CompletedOrders";
 
 const App = () => (
   // <QueryClientProvider client={queryClient}>
@@ -31,8 +32,9 @@ const App = () => (
         <Route path="/admin/register" element={<AdminRegistration />} />
         <Route path="/admin/tables" element={<AdminTables />} />
         <Route path="/admin/categories" element={<AdminCategories />} />
-        {<Route path="/admin/foods" element={<AdminFood />} />}
-        {<Route path="/admin/orderpage" element={<AdminOrder />} />}
+        {<Route path="/admin/foods" element={<AdminFood />} /> }
+        {<Route path="/admin/orderpage" element={<AdminOrder />} /> }
+        {<Route path="/admin/completed" element={<CompletedOrders />} /> }
         {/* 404 route */}
         <Route path="*" element={<NotFound />} />
       </Routes>

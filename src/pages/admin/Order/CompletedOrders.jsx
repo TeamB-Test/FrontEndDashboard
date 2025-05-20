@@ -128,7 +128,7 @@ const CompletedOrders = () => {
     >
       <option value="PENDING">PENDING</option>
       <option value="COMPLETED">COMPLETED</option>
-      <option value="CANCELLED">CANCELLED</option>
+      <option value="ACCEPTED">ACCEPTED</option>
     </select>
   </div>
 </CardContent>
